@@ -1,54 +1,56 @@
 const output = document.getElementById("output");
-    const ip = document.getElementById("ip");
-    const btn = document.getElementById("btn");
+const ip = document.getElementById("ip");
+const btn = document.getElementById("btn");
 
-    // promise functions
-    function firstInput() {
-      return new Promise((resolve) => {
-        setTimeout(() => resolve(Number(ip.value)), 2000);
-      });
-    }
-    function secondInput() {
-      return new Promise((resolve) => {
-        setTimeout(() => resolve(Number(ip.value) * 2), 1000);
-      });
-    }
-    function thirdInput() {
-      return new Promise((resolve) => {
-        setTimeout(() => resolve(Number(ip.value) - 3), 1000);
-      });
-    }
-    function fourthInput() {
-      return new Promise((resolve) => {
-        setTimeout(() => resolve(Number(ip.value) / 2), 1000);
-      });
-    }
-    function fifthInput() {
-      return new Promise((resolve) => {
-        setTimeout(() => resolve(Number(ip.value) + 10), 1000);
-      });
-    }
+// promise functions - now accept a value parameter for chaining
+function firstInput(value) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(value), 2000);
+  });
+}
 
-    // consumption
-    btn.addEventListener("click", async () => {
-      output.innerText = ""; // clear
-      const inputVal = Number(ip.value);
+function secondInput(value) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(value * 2), 1000);
+  });
+}
 
-      output.innerText += `Test Case 1: Input ${inputVal}\n\n`;
-      output.innerText += `Before any transformations: The output div is empty.\n`;
+function thirdInput(value) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(value - 3), 1000);
+  });
+}
 
-      const res1 = await firstInput();
-      output.innerText += `After 2 seconds: Result: ${res1}\n`;
+function fourthInput(value) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(value / 2), 1000);
+  });
+}
 
-      const res2 = await secondInput();
-      output.innerText += `After 3 seconds: Result: ${res2}\n`;
+function fifthInput(value) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(value + 10), 1000);
+  });
+}
 
-      const res3 = await thirdInput();
-      output.innerText += `After 4 seconds: Result: ${res3}\n`;
-
-      const res4 = await fourthInput();
-      output.innerText += `After 5 seconds: Result: ${res4}\n`;
-
-      const res5 = await fifthInput();
-      output.innerText += `After 6 seconds: Final Result: ${res5}\n`;
-    });
+// consumption - now properly chains the promises
+btn.addEventListener("click", async () => {
+  output.innerText = ""; // clear
+  const inputVal = Number(ip.value);
+  
+  // Chain the promises properly, passing results from one to the next
+  const res1 = await firstInput(inputVal);
+  output.innerText += `Result: ${res1}`;
+  
+  const res2 = await secondInput(res1);
+  output.innerText += `Result: ${res2}`;
+  
+  const res3 = await thirdInput(res2);
+  output.innerText += `Result: ${res3}`;
+  
+  const res4 = await fourthInput(res3);
+  output.innerText += `Result: ${res4}`;
+  
+  const res5 = await fifthInput(res4);
+  output.innerText += `Final Result: ${res5}`;
+});
